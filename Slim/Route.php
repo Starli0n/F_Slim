@@ -9,6 +9,7 @@
 namespace Slim;
 
 use Exception;
+use Throwable;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -325,6 +326,9 @@ class Route extends Routable implements RouteInterface
                 $newResponse = $handler($this->callable, $request, $response, $this->arguments);
                 $output = ob_get_clean();
             } catch (Exception $e) {
+                ob_end_clean();
+                throw $e;
+            } catch (Throwable $e) {
                 ob_end_clean();
                 throw $e;
             }
